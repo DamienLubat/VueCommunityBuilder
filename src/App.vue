@@ -11,6 +11,10 @@ export default {
   components: {
     Network
   },
+  /*created() {
+    console.log(this.users);  // affiche la liste des utilisateurs dans la console
+    console.log(this.groups);  // affiche la liste des groupes dans la console
+  },*/
   data() {
     return {
       users: [
@@ -22,6 +26,7 @@ export default {
         { id: 1, name: 'scientifique'},
         { id: 2, name: 'footballeur'},
        ],
+      filters: ['amis', 'groupes', 'groupesAdmin'], // ajoutez cette ligne
       loggedInUser: {
         name: "Damien Lubat",
         username: "Luwer12",
@@ -35,7 +40,7 @@ export default {
 
 <template>
   <div id="app">
-    <Network :users="users" :groups="groups" />
+    <Network :users="users" :groups="groups" s:filters="filters" :loggedInUser="loggedInUser" />
   </div>
 </template>
 

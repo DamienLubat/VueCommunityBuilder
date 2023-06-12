@@ -40,7 +40,8 @@ export default {
         filteredUsers: function() {
             if (this.users) {  // vérifie si users est définie
                 return this.users.filter(user => {
-                    return this.filters.friendFilter || (this.filters.groupFilter && user.isAdmin);
+                    return this.filters.includes('amis') && user.isFriend ||
+                           this.filters.includes('groupes') && user.isAdmin;
                 });
             } else {
                 return [];  // retourne une liste vide si users est indéfinie
@@ -70,4 +71,3 @@ export default {
     }
 }
 </script>
-
