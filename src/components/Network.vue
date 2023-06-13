@@ -1,14 +1,20 @@
 <template>
     <div>
+        <!-- Ajoutez ce bouton -->
+        <button @click="isAddMemberDialogOpen = true">Ajouter un membre</button>
+
+        <!-- Ajoutez ce dialogue -->
+        <AddMemberDialog :users="users" :groups="groups" v-if="isAddMemberDialogOpen" @close="isAddMemberDialogOpen = false" />
+
         <form @submit.prevent="filter">
             <label>
-                <input type="checkbox" value="amis" v-model="filters" checked> Amis
+                <input type="checkbox" value="amis" v-model="filters"> Amis
             </label>
             <label>
-                <input type="checkbox" value="groupes" v-model="filters" checked> Groupes
+                <input type="checkbox" value="groupes" v-model="filters" > Groupes
             </label>
             <label>
-                <input type="checkbox" value="groupesAdmin" v-model="filters" checked> Groupes dont on est l’administrateur
+                <input type="checkbox" value="groupesAdmin" v-model="filters" > Groupes dont on est l’administrateur
             </label>
         </form>
         <div v-for="user in filteredUsers" :key="user.id">
@@ -24,16 +30,20 @@
 <script>
 import UserCard from './UserCard.vue';
 import GroupCard from './GroupCard.vue';
+import AddMemberDialog from './AddMemberDialog.vue';
+
 
 export default {
     components: {
         UserCard,
-        GroupCard
+        GroupCard,
+        AddMemberDialog
     },
     props: ['users', 'groups'],
     data() {
         return {
             filters: ['amis', 'groupes', 'groupesAdmin'],
+            isAddMemberDialogOpen: false,
         };
     },
     computed: {
@@ -41,7 +51,8 @@ export default {
             if (this.users) {  // vérifie si users est définie
                 return this.users.filter(user => {
                     return this.filters.includes('amis') && user.isFriend ||
-                           this.filters.includes('groupes') && user.isAdmin;
+                           this.filters.includes('groupes') && user.isGroup ||
+                           this.filters.includes('groupesAdmin') && user.isAdmin;
                 });
             } else {
                 return [];  // retourne une liste vide si users est indéfinie

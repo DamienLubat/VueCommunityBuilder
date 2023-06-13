@@ -17,10 +17,10 @@
         searchQuery: '',
         searchResults: [],
         users: [
-        { id: 1, name: 'Albert Einstein', picture: './assets/img/albert-einstein.png', isAdmin: false },
-        { id: 2, name: 'Roberto Firmino', picture: './assets/img/roberto-firmino.png', isAdmin: false },
-        { id: 2, name: 'James Milner', picture: './assets/img/james-milner.jpeg', isAdmin: true },
-        ]
+          { id: 1, name: 'Albert Einstein', picture: './assets/img/albert-einstein.png', isAdmin: false, isGroup: false, isFriend: false },
+          { id: 2, name: 'Roberto Firmino', picture: './assets/img/roberto-firmino.png', isAdmin: false, isGroup: false, isFriend: true },
+          { id: 3, name: 'James Milner', picture: './assets/img/james-milner.jpeg', isAdmin: true, isGroup: true, isFriend: true },
+        ],
       }
     },
     methods: {

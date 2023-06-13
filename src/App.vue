@@ -4,12 +4,13 @@ import UserCard from './components/UserCard.vue'
 import Search from './components/Search.vue'
 import Network from './components/Network.vue'
 import GroupCard from './components/GroupCard.vue'
-
+import AddMemberDialog from './components/AddMemberDialog.vue';
 
 export default {
   name: 'App',
   components: {
-    Network
+    Network,
+    AddMemberDialog
   },
   /*created() {
     console.log(this.users);  // affiche la liste des utilisateurs dans la console
@@ -18,10 +19,10 @@ export default {
   data() {
     return {
       users: [
-        { id: 1, name: 'Albert Einstein', picture: './assets/img/albert-einstein.png', isAdmin: false },
-        { id: 2, name: 'Roberto Firmino', picture: './assets/img/roberto-firmino.png', isAdmin: false },
-        { id: 2, name: 'James Milner', picture: './assets/img/james-milner.jpeg', isAdmin: true },
-      ],
+          { id: 1, name: 'Albert Einstein', picture: './assets/img/albert-einstein.png', isAdmin: false, isGroup: true, isFriend: false },
+          { id: 2, name: 'Roberto Firmino', picture: './assets/img/roberto-firmino.png', isAdmin: false, isGroup: true, isFriend: true },
+          { id: 3, name: 'James Milner', picture: './assets/img/james-milner.jpeg', isAdmin: true, isGroup: true, isFriend: true },
+        ],
       groups: [ 
         { id: 1, name: 'scientifique'},
         { id: 2, name: 'footballeur'},
@@ -41,6 +42,7 @@ export default {
 <template>
   <div id="app">
     <Network :users="users" :groups="groups" s:filters="filters" :loggedInUser="loggedInUser" />
+    <AddMemberDialog />
   </div>
 </template>
 
