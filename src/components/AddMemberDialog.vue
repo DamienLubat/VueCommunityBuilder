@@ -1,76 +1,71 @@
 <template>
-    <v-dialog v-model="dialog" max-width="500px">
-      <v-card>
-        <v-card-title>
-          <span class="headline">Ajouter des amis ou des groupes</span>
-        </v-card-title>
-        <v-card-text>
-          <v-checkbox label="Ami" v-model="isAddingFriend"></v-checkbox>
-          <v-checkbox label="Groupe" v-model="isAddingGroup"></v-checkbox>
-          <input type="text" v-model="searchQuery" @input="search" />
-          <div v-for="result in searchResults" :key="result.id" @click="addUser(result)">
-            {{ result.name }}
-          </div>
-          <div v-for="(user, index) in selectedUsers" :key="user.id">
-            {{ user.name }}
-            <v-btn small @click="selectedUsers.splice(index, 1)">Supprimer</v-btn>
-          </div>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="green darken-1" text @click="dialog = false">Fermer</v-btn>
-          <v-btn color="green darken-1" text @click="add">Ajouter</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </template>
+  <div class="dialog" v-if="isAddMemberDialogOpen">
+    <div class="card">
+      <h2>Ajouter des amis ou des groupes</h2>
+      <div>
+        <input type="checkbox" id="ami" v-model="isAddingFriend" />
+        <label for="ami">Ami</label>
+        <input type="checkbox" id="groupe" v-model="isAddingGroup" />
+        <label for="groupe">Groupe</label>
+      </div>
+      <input type="text" v-model="searchQuery" @input="search" />
+      <div v-for="result in searchResults" :key="result.id" @click="addUser(result)">
+        {{ result.name }}
+      </div>
+      <div v-for="(user, index) in selectedUsers" :key="user.id">
+        {{ user.name }}
+        <button @click="selectedUsers.splice(index, 1)">Supprimer</button>
+      </div>
+      <div>
+        <button @click="dialog = false">Fermer</button>
+        <button @click="add">Ajouter</button>
+      </div>
+    </div>
+  </div>
+</template>
   
 <script>
 export default {
-    data() {
-        return {
-            dialog: false,
-            isAddingFriend: false,
-            isAddingGroup: false,
-            itemsToSearch: [], // liste des noms d'utilisateurs ou de groupes à chercher
-            selectedItems: [],
-            searchQuery: '',
-            searchResults: [],
-            selectedUsers: [],
-        };
+  data() {
+    return {
+      dialog: false,
+      isAddingFriend: false,
+      isAddingGroup: false,
+      searchQuery: '',
+      searchResults: [],
+      selectedUsers: [],
+    };
+  },
+  methods: {
+    search() {
+      // déclenche la recherche à partir de 3 lettres
+      if (this.searchQuery.length >= 3) {
+        this.searchResults = this.$props.users.filter(user =>
+          user.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+        );
+      } else {
+        this.searchResults = [];
+      }
     },
-    methods: {
-        customFilter(item, queryText, itemText) {
-            // déclenche la recherche à partir de 3 lettres
-            if (queryText.length >= 3) {
-                const text = itemText.toLowerCase();
-                const query = queryText.toLowerCase();
-
-                return text.indexOf(query) > -1;
-            }
-
-            return false;
-        },
-        add() {
-            if (this.selectedItems.length <= 5) {
-                // ajoutez votre logique ici pour ajouter des amis ou des groupes
-            }
-        },
-        search() {
-            if (this.searchQuery.length >= 3) {
-                this.searchResults = this.users.filter(user =>
-                    user.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-                );
-            } else {
-                this.searchResults = [];
-            }
-        },
-        addUser(user) {
-            if (this.selectedUsers.length < 5 && !this.selectedUsers.includes(user)) {
-                this.selectedUsers.push(user);
-            }
-        },
+    addUser(user) {
+      if (this.selectedUsers.length < 5 && !this.selectedUsers.includes(user)) {
+        this.selectedUsers.push(user);
+      }
     },
-    props: ['users', 'groups'],
+    add(user) {
+      // Vous devez vérifier si la longueur de selectedUsers n'est pas déjà à 5.
+      // S'il y a de la place, ajoutez tous les utilisateurs recherchés.
+      if (this.selectedUsers.length < 5) {
+        this.searchResults.forEach(user => {
+          if (!this.selectedUsers.includes(user)) {
+            this.selectedUsers.push(user)
+          }
+        });
+      } else {
+        console.log("Vous ne pouvez pas ajouter plus de 5 éléments à la liste");
+      }
+    },
+  },
+  props: ['users', 'groups'],
 };
 </script>

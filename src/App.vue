@@ -41,9 +41,9 @@ export default {
 
 <template>
   <div id="app">
-    <Network :users="users" :groups="groups" s:filters="filters" :loggedInUser="loggedInUser" />
-    <AddMemberDialog />
-  </div>
+    <Network :users="users" :groups="groups" :filters="filters" :loggedInUser="loggedInUser" />
+    <AddMemberDialog :users="users" :groups="groups" />
+</div>
 </template>
 
 <style scoped>
