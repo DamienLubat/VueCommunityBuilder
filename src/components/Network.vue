@@ -1,29 +1,29 @@
 <template>
     <div>
         <!-- Ajoutez ce bouton -->
-        <button @click="isAddMemberDialogOpen = true">Ajouter un membre</button>
-
+        <button @click="openAddMemberDialog">Ajouter un membre</button>
+        
         <!-- Ajoutez ce dialogue -->
-        <AddMemberDialog :users="users" :groups="groups" v-if="isAddMemberDialogOpen"
-            @close="isAddMemberDialogOpen = false" />
+        <AddMemberDialog :internalUsers="internalUsers" :groups="groups" :isOpen="isAddMemberDialogOpen" 
+                 @close="closeAddMemberDialog" @add="addMembers"/>
 
         <form @submit.prevent="filter">
             <label>
-                <input type="checkbox" value="amis" v-model="filters"> Amis
+                <input type="checkbox" value="amis" v-model="internalFilters"> Amis
             </label>
             <label>
-                <input type="checkbox" value="groupes" v-model="filters"> Groupes
+                <input type="checkbox" value="groupes" v-model="internalFilters"> Groupes
             </label>
             <label>
-                <input type="checkbox" value="groupesAdmin" v-model="filters"> Groupes dont on est l’administrateur
+                <input type="checkbox" value="groupesAdmin" v-model="internalFilters"> Groupes dont on est l’administrateur
             </label>
         </form>
         <div @submit.prevent="filter">
-            <div v-for="user in filteredUsers" :key="user.id">
-                <UserCard :user="user" :canRemove="canRemove(user)" @remove="removeUser(user)" />
+            <div v-for="user in internalUsers" :key="user.id">  <!-- Ici -->
+                <UserCard :user="user" />
             </div>
-            <div v-for="group in filteredGroups" :key="group.id">
-                <GroupCard :group="group" :canRemove="canRemove(group)" @remove="removeGroup(group)" />
+            <div v-for="group in internalGroups" :key="group.id">  <!-- Et ici -->
+                <GroupCard :group="group" />
             </div>
         </div>
     </div>
@@ -41,45 +41,52 @@ export default {
         GroupCard,
         AddMemberDialog
     },
-    props: ['users', 'groups'],
+    created() {
+        console.log(this.$data.isAddMemberDialogOpen);  // affiche la liste des utilisateurs dans la console
+        console.log(this.groups);  // affiche la liste des groupes dans la console
+    },
+    props: ['users', 'groups', 'filters', 'loggedInUser'],
     data() {
         return {
-            filters: ['amis', 'groupes', 'groupesAdmin'],
-            isAddMemberDialogOpen: false,
+            internalUsers: this.users,
+            internalGroups: this.groups,
+            internalFilters: this.filters,
+            isAddMemberDialogOpen: false,  // Ajoutez ceci
         };
     },
     computed: {
         filteredUsers: function () {
-            if (this.$props.users) {  // vérifie si users est définie
-                return this.$props.users.filter(user => {
-                    return this.filters.includes('amis') && user.isFriend ||
-                        this.filters.includes('groupes') && user.isGroup ||
-                        this.filters.includes('groupesAdmin') && user.isAdmin;
-                });
-            } else {
-                return [];  // retourne une liste vide si users est indéfinie
-            }
+        if (this.internalUsers) {   //Verifie si internalUsers est definie
+            return this.internalUsers.filter(user => {
+            return this.internalFilters.includes('amis') && user.isFriend ||
+                    this.internalFilters.includes('groupes') && user.isGroup ||
+                    this.internalFilters.includes('groupesAdmin') && user.isAdmin;
+            });
+        } else {
+            return [];
+        }
         },
         filteredGroups: function () {
-            let groups = [...this.groups];
-            if (this.filters.groups) {
-                groups = groups.filter(group => group.members.includes(this.loggedInUser.id));
-            }
-            if (this.filters.adminGroups) {
-                groups = groups.filter(group => group.admins.includes(this.loggedInUser.id));
-            }
-            return groups;
+        let groups = [...this.internalGroups];
+        if (this.internalFilters.includes('groupes')) {
+            groups = groups.filter(group => group.members.includes(this.loggedInUser.id));
+        }
+        if (this.internalFilters.includes('groupesAdmin')) {
+            groups = groups.filter(group => group.admins.includes(this.loggedInUser.id));
+        }
+        return groups;
         }
     },
     methods: {
-        canRemove(item) {
-            // implémentez la logique ici
+        openAddMemberDialog() {
+            this.isAddMemberDialogOpen = true;
         },
-        removeUser(user) {
-            // implémentez la logique ici
+        closeAddMemberDialog() {
+            this.isAddMemberDialogOpen = false;
         },
-        removeGroup(group) {
-            // implémentez la logique ici
+        addMembers(newMembers) {
+            this.internalUsers = this.internalUsers.concat(newMembers);
+            console.log(this.internalUsers);
         },
     }
 }

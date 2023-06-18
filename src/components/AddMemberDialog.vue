@@ -1,5 +1,5 @@
 <template>
-  <div class="dialog" v-if="isAddMemberDialogOpen">
+  <div class="dialog" v-if="isOpen">
     <div class="card">
       <h2>Ajouter des amis ou des groupes</h2>
       <div>
@@ -17,7 +17,7 @@
         <button @click="selectedUsers.splice(index, 1)">Supprimer</button>
       </div>
       <div>
-        <button @click="dialog = false">Fermer</button>
+        <button @click="$emit('close')">Fermer</button>
         <button @click="add">Ajouter</button>
       </div>
     </div>
@@ -28,7 +28,6 @@
 export default {
   data() {
     return {
-      dialog: false,
       isAddingFriend: false,
       isAddingGroup: false,
       searchQuery: '',
@@ -58,14 +57,23 @@ export default {
       if (this.selectedUsers.length < 5) {
         this.searchResults.forEach(user => {
           if (!this.selectedUsers.includes(user)) {
-            this.selectedUsers.push(user)
+            this.selectedUsers.push(user);
           }
         });
       } else {
         console.log("Vous ne pouvez pas ajouter plus de 5 éléments à la liste");
       }
+      this.$emit('add', this.selectedUsers);
+    },
+    close() {
+      this.$emit('close');
     },
   },
-  props: ['users', 'groups'],
+  props: ['users', 'groups', 'isOpen'],
+  watch: {
+    isOpen(newVal) {
+      this.dialog = newVal;
+    },
+  },
 };
 </script>
