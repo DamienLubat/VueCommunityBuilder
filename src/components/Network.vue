@@ -85,9 +85,13 @@ export default {
             this.isAddMemberDialogOpen = false;
         },
         addMembers(newMembers) {
-            this.internalUsers = this.internalUsers.concat(newMembers);
+            newMembers.forEach(newMember => {
+                if (!this.internalUsers.some(user => user.id === newMember.id)) {
+                this.internalUsers.push(newMember);
+                }
+            });
             console.log(this.internalUsers);
-        },
+        }
     }
 }
 </script>
