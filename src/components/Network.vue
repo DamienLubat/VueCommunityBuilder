@@ -4,8 +4,8 @@
         <button @click="openAddMemberDialog">Ajouter un membre</button>
         
         <!-- Ajoutez ce dialogue -->
-        <AddMemberDialog :internalUsers="internalUsers" :groups="groups" :isOpen="isAddMemberDialogOpen" 
-                 @close="closeAddMemberDialog" @add="addMembers"/>
+        <AddMemberDialog :internalUsers="internalUsers" :groups="groups" :isOpen="isAddMemberDialogOpen" :result="myResult" 
+                 @close="closeAddMemberDialog" @add="addMembers" @remove="removeUser"/>
 
         <form @submit.prevent="filter">
             <label>
@@ -48,6 +48,7 @@ export default {
     props: ['users', 'groups', 'filters', 'loggedInUser'],
     data() {
         return {
+            myResult: null,
             internalUsers: this.users,
             internalGroups: this.groups,
             internalFilters: this.filters,
@@ -91,7 +92,13 @@ export default {
                 }
             });
             console.log(this.internalUsers);
-        }
+        },
+        removeUser(user) {
+            const index = this.internalUsers.findIndex(u => u.id === user.id);
+            if (index !== -1) {
+            this.internalUsers.splice(index, 1);
+            }
+        },
     }
 }
 </script>

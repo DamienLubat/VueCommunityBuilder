@@ -14,32 +14,20 @@
         <input type="checkbox" id="groupe" v-model="isAddingGroup" />
         <label for="groupe">Groupe</label>
       </div>
-      <!-- Zone de texte pour rechercher des amis ou des groupes -->
-      <input type="text" v-model="searchQuery" @input="search" />
-      <!-- Liste des résultats de la recherche -->
-      <div v-for="result in searchResults" :key="result.id" @click="addUser(result)">
-        {{ result.name }}
-      </div>
-      <!-- Liste des utilisateurs sélectionnés avec une option pour les supprimer -->
-      <div v-for="(user, index) in selectedUsers" :key="user.id">
-        {{ user.name }}
-        <button @click="selectedUsers.splice(index, 1)">Supprimer</button>
-      </div>
-      <!-- Liste des utilisateurs filtrés -->
-      <div v-for="user in filteredUsers" :key="user.id">
-        {{ result.name }}
-      </div>
       <!-- Liste des groupes filtrés -->
       <div v-for="group in filteredGroups" :key="group.id">
         {{ user.name }}
       </div>
       <!-- Boutons pour fermer la boite de dialogue et ajouter des utilisateurs à la liste -->
-      <div>
-        <button @click="$emit('close')">Fermer</button>
-        <button @click="add">Ajouter</button>
         <!-- Zone de texte pour rechercher des utilisateurs ou des groupes -->
         <input v-model="searchQuery" type="text" placeholder="Search..." />
-      </div>
+        <!-- Liste des utilisateurs sélectionnés avec une option pour les supprimer -->
+        <div v-for="(user, index) in selectedUsers" :key="user.id">
+          {{ user.name }}
+          <button @click="removeUser(user, index)">Supprimer</button>
+        </div>
+        <button @click="$emit('close')">Fermer</button>
+        <button @click="add">Ajouter</button>
     </div>
   </div>
 </template>
@@ -49,6 +37,7 @@ export default {
   data() {
     return {
       // Initialisation des données
+      result: null,
       searchQuery: '',         // requête de recherche
       isAddingFriend: false,   // ajouter un ami
       isAddingGroup: false,    // ajouter un groupe
@@ -95,11 +84,23 @@ export default {
     },
     // Méthode pour ajouter tous les utilisateurs recherchés à la liste des utilisateurs sélectionnés
     add() {
-      this.searchResults.forEach(user => {
-        if (this.selectedUsers.length < 5 && !this.selectedUsers.includes(user)) {
-          this.selectedUsers.push(user);
-        }
-      });
+      /*je veux faire cree un UserCard avec ce que l'utilisateur a taper(this.searchQuery)*/
+      console.log(this.searchQuery);
+
+      // Créer un nouvel utilisateur avec le texte saisi
+      let newUser = {
+        id: this.internalUsers.length + 1,  // Générer une id unique basée sur la longueur de la liste des utilisateurs
+        name: this.searchQuery,  // Utiliser le texte saisi comme nom
+        picture: '',  // Utiliser une image par défaut ou permettre à l'utilisateur de la télécharger
+        isAdmin: false,  // Par défaut, le nouvel utilisateur n'est pas un admin
+        isGroup: false,  // Par défaut, le nouvel utilisateur n'est pas un groupe
+        isFriend: true,  // Par défaut, le nouvel utilisateur n'est pas un ami
+      };
+
+      // Ajouter le nouvel utilisateur à la liste des utilisateurs sélectionnés
+      if (this.selectedUsers.length < 5 && !this.selectedUsers.includes(newUser)) {
+        this.selectedUsers.push(newUser);
+      }
       if (this.selectedUsers.length >= 5) {
         console.log("Vous ne pouvez pas ajouter plus de 5 éléments à la liste");
       }
@@ -108,6 +109,10 @@ export default {
     // Méthode pour fermer la boite de dialogue
     close() {
       this.$emit('close');
+    },
+    removeUser(user, index) {
+      this.selectedUsers.splice(index, 1);
+      this.$emit('remove', user);
     },
   },
   props: ['internalUsers', 'groups', 'isOpen'], // Réception des propriétés du parent

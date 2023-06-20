@@ -33,7 +33,8 @@ export default {
         username: "Luwer12",
         isAdmin: true
         // autres détails ici
-      }
+      },
+      myResult: null
     }
   }
 }
@@ -42,7 +43,7 @@ export default {
 <template>
   <div id="app">
     <Network :users="users" :groups="groups" :filters="filters" :loggedInUser="loggedInUser" />
-    <AddMemberDialog :users="users" :groups="groups" />
+    <AddMemberDialog :users="users" :groups="groups" :result="myResult" />
 </div>
 </template>
 
