@@ -5,7 +5,7 @@
         
         <!-- Boite de dialogue -->
         <AddMemberDialog :internalUsers="internalUsers" :groups="groups" :isOpen="isAddMemberDialogOpen" :result="myResult" 
-                 @close="closeAddMemberDialog" @add="addMembers" @remove="removeUser"/>
+                @close="closeAddMemberDialog" @add-user="addUser" @add-group="addGroup" @remove="removeUser"/>
 
         <form @submit.prevent="filter">
             <label>
@@ -29,7 +29,7 @@
             </div>
         </div>
         <div @submit.prevent="filter">
-            <div v-for="user in displayedUsers" :key="user.id">
+            <div v-for="user in filteredUsers" :key="user.id">
                 <UserCard :user="user" @remove="removeUser" />
             </div>
             <div v-for="group in internalGroups" :key="group.id">
@@ -71,11 +71,11 @@ export default {
     },
     computed: {
         filteredUsers: function () {
-            if (this.internalUsers) {   //Verifie si internalUsers est definie
+            if (this.internalUsers) {
                 return this.internalUsers.filter(user => {
-                return this.internalFilters.includes('amis') && user.isFriend ||
-                        this.internalFilters.includes('groupes') && user.isGroup ||
-                        this.internalFilters.includes('groupesAdmin') && user.isAdmin;
+                    return (this.internalFilters.includes('amis') && user.isFriend) ||
+                        (this.internalFilters.includes('groupes') && user.isGroup) ||
+                        (this.internalFilters.includes('groupesAdmin') && user.isGroup && user.isAdmin);
                 });
             } else {
                 return [];
@@ -84,10 +84,10 @@ export default {
         filteredGroups: function () {
             let groups = [...this.internalGroups];
             if (this.internalFilters.includes('groupes')) {
-                groups = groups.filter(group => group.members.includes(this.loggedInUser.id));
+                groups = groups.filter(group => group.members.some(member => member.id === this.loggedInUser.id));
             }
             if (this.internalFilters.includes('groupesAdmin')) {
-                groups = groups.filter(group => group.admins.includes(this.loggedInUser.id));
+                groups = groups.filter(group => group.admins.some(admin => admin.id === this.loggedInUser.id));
             }
             return groups;
         },
@@ -113,13 +113,15 @@ export default {
         closeAddMemberDialog() {
             this.isAddMemberDialogOpen = false;
         },
-        addMembers(newMembers) {
-            newMembers.forEach(newMember => {
-                if (!this.internalUsers.some(user => user.id === newMember.id)) {
-                    this.internalUsers.push(newMember);
-                }
-            });
-            console.log(this.internalUsers);
+        addUser(newUser) {
+            if (!this.internalUsers.some(user => user.id === newUser.id)) {
+                this.internalUsers.push(newUser);
+            }
+        },
+        addGroup(newGroup) {
+            if (!this.internalGroups.some(group => group.id === newGroup.id)) {
+                this.internalGroups.push(newGroup);
+            }
         },
         removeUser(user) {
             const index = this.internalUsers.findIndex(u => u.id === user.id);
