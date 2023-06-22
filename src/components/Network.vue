@@ -1,9 +1,9 @@
 <template>
     <div>
-        <!-- Ajoutez ce bouton -->
+        <!-- Bouton qui affiche le boite de dialogue -->
         <button @click="openAddMemberDialog">Ajouter un membre</button>
         
-        <!-- Ajoutez ce dialogue -->
+        <!-- Boite de dialogue -->
         <AddMemberDialog :internalUsers="internalUsers" :groups="groups" :isOpen="isAddMemberDialogOpen" :result="myResult" 
                  @close="closeAddMemberDialog" @add="addMembers" @remove="removeUser"/>
 
@@ -18,18 +18,28 @@
                 <input type="checkbox" value="groupesAdmin" v-model="internalFilters"> Groupes dont on est l’administrateur
             </label>
         </form>
-        <div @submit.prevent="filter">
-            <div v-for="user in internalUsers" :key="user.id">  <!-- Ici -->
-                <UserCard :user="user" />
+        <div>
+            <input type="text" v-model="searchText" placeholder="Recherche..">
+            
+            <div class="dropdown-content" v-show="searchText.length > 0 && filteredOptions.length > 0">
+                <div v-for="option in filteredOptions" :key="option.id">
+                    <input type="checkbox" :id="option.id" :value="option.name" v-model="selectedUsers">
+                    <label :for="option.id">{{ option.name }}</label>
+                </div>
             </div>
-            <div v-for="group in internalGroups" :key="group.id">  <!-- Et ici -->
-                <GroupCard :group="group" />
+        </div>
+        <div @submit.prevent="filter">
+            <div v-for="user in displayedUsers" :key="user.id">
+                <UserCard :user="user" @remove="removeUser" />
+            </div>
+            <div v-for="group in internalGroups" :key="group.id">
+                <GroupCard :group="group" @remove="removeGroup" />
             </div>
         </div>
     </div>
 </template>
 
-  
+
 <script>
 import UserCard from './UserCard.vue';
 import GroupCard from './GroupCard.vue';
@@ -52,30 +62,48 @@ export default {
             internalUsers: this.users,
             internalGroups: this.groups,
             internalFilters: this.filters,
-            isAddMemberDialogOpen: false,  // Ajoutez ceci
+            isAddMemberDialogOpen: false,
+            searchText: '',
+            options: [],
+            searchText: '',
+            selectedUsers: [],
         };
     },
     computed: {
         filteredUsers: function () {
-        if (this.internalUsers) {   //Verifie si internalUsers est definie
-            return this.internalUsers.filter(user => {
-            return this.internalFilters.includes('amis') && user.isFriend ||
-                    this.internalFilters.includes('groupes') && user.isGroup ||
-                    this.internalFilters.includes('groupesAdmin') && user.isAdmin;
-            });
-        } else {
-            return [];
-        }
+            if (this.internalUsers) {   //Verifie si internalUsers est definie
+                return this.internalUsers.filter(user => {
+                return this.internalFilters.includes('amis') && user.isFriend ||
+                        this.internalFilters.includes('groupes') && user.isGroup ||
+                        this.internalFilters.includes('groupesAdmin') && user.isAdmin;
+                });
+            } else {
+                return [];
+            }
         },
         filteredGroups: function () {
-        let groups = [...this.internalGroups];
-        if (this.internalFilters.includes('groupes')) {
-            groups = groups.filter(group => group.members.includes(this.loggedInUser.id));
-        }
-        if (this.internalFilters.includes('groupesAdmin')) {
-            groups = groups.filter(group => group.admins.includes(this.loggedInUser.id));
-        }
-        return groups;
+            let groups = [...this.internalGroups];
+            if (this.internalFilters.includes('groupes')) {
+                groups = groups.filter(group => group.members.includes(this.loggedInUser.id));
+            }
+            if (this.internalFilters.includes('groupesAdmin')) {
+                groups = groups.filter(group => group.admins.includes(this.loggedInUser.id));
+            }
+            return groups;
+        },
+        filteredOptions() {
+            if (!this.searchText) {
+                return [];
+            }
+            let filter = this.searchText.toLowerCase();
+            return this.internalUsers.filter(user => user.name.toLowerCase().includes(filter));
+        },
+        displayedUsers() {
+            if (this.searchText.trim() === '') {
+                return this.internalUsers;
+            } else {
+                return this.internalUsers.filter(user => this.selectedUsers.includes(user.name));
+            }
         }
     },
     methods: {
@@ -88,7 +116,7 @@ export default {
         addMembers(newMembers) {
             newMembers.forEach(newMember => {
                 if (!this.internalUsers.some(user => user.id === newMember.id)) {
-                this.internalUsers.push(newMember);
+                    this.internalUsers.push(newMember);
                 }
             });
             console.log(this.internalUsers);
@@ -96,9 +124,31 @@ export default {
         removeUser(user) {
             const index = this.internalUsers.findIndex(u => u.id === user.id);
             if (index !== -1) {
-            this.internalUsers.splice(index, 1);
+                if (confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
+                    this.internalUsers.splice(index, 1);
+                }
+            }
+        },
+        removeGroup(group) {
+            const index = this.internalGroups.findIndex(g => g.id === group.id);
+            if (index !== -1) {
+                if (confirm('Êtes-vous sûr de vouloir supprimer ce groupe ?')) {
+                    this.internalGroups.splice(index, 1);
+                }
             }
         },
     }
 }
 </script>
+
+<style scoped>
+
+.dropdown-content {
+  position: absolute;
+  /* autres styles */
+}
+.dropdown-content label {
+  /* styles pour les labels */
+}
+
+</style>

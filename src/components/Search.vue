@@ -1,15 +1,15 @@
 <template>
-    <div class="search">
-      <input type="text" v-model="searchQuery" placeholder="Search" @input="search" />
-      <div v-for="result in searchResults" :key="result.id">
-        <!-- Affichez les résultats de recherche ici. Par exemple: -->
-        <div>{{ result.name }}</div>
-      </div>
+  <div class="search">
+    <input type="text" v-model="searchQuery" placeholder="Search" @input="search" />
+    <div v-for="result in searchResults" :key="result.id">
+      <!-- Affichez les résultats de recherche ici -->
+      <div>{{ result.name }}</div>
     </div>
-  </template>
+  </div>
+</template>
   
-  <script>
-    import albertEinstein from '@/assets/img/albert-einstein.png'
+<script>
+  import albertEinstein from '@/assets/img/albert-einstein.png'
 
   export default {
     data() {
@@ -35,9 +35,6 @@
       }
     }
   }
-  </script>
-  
-  <style scoped>
-  /* Ajoutez votre CSS ici */
-  </style>
+</script>
+
   

@@ -14,9 +14,13 @@
         <input type="checkbox" id="groupe" v-model="isAddingGroup" />
         <label for="groupe">Groupe</label>
       </div>
+      <!-- Liste des amis filtrés -->
+      <div v-for="user in filteredUsers" :key="user.id">
+        {{ user.name }} est déjà utilisée
+      </div>
       <!-- Liste des groupes filtrés -->
       <div v-for="group in filteredGroups" :key="group.id">
-        {{ user.name }}
+        {{ group.name }} est déjà utilisée
       </div>
       <!-- Boutons pour fermer la boite de dialogue et ajouter des utilisateurs à la liste -->
         <!-- Zone de texte pour rechercher des utilisateurs ou des groupes -->
@@ -111,9 +115,11 @@ export default {
       this.$emit('close');
     },
     removeUser(user, index) {
+    if (user) {
       this.selectedUsers.splice(index, 1);
       this.$emit('remove', user);
-    },
+    }
+  }
   },
   props: ['internalUsers', 'groups', 'isOpen'], // Réception des propriétés du parent
   watch: {
