@@ -1,0 +1,20 @@
+.wrapper {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 100px;
+    grid-auto-rows: minmax(100px, 100px);
+  }
+  .one {
+    display: flex;
+    flex-wrap: wrap;
+    grid-column: 7 / 8;
+    grid-row: 8 / 10;
+    width: 80%;
+  }
+  .two{
+    display: flex;
+    flex-wrap: wrap;
+    grid-column: 1 / 8;
+    grid-row: 2 / 10;
+    width: 20%;
+  }

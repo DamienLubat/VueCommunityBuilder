@@ -98,7 +98,7 @@ export default {
       if (this.isAddingFriend) {
         // Créer un nouvel utilisateur avec le texte saisi
         let newUser = {
-          id: this.internalUsers.length + 1,  // Générer une id unique basée sur la longueur de la liste des utilisateurs
+          id: Math.random().toString(36).substr(2, 9),  // Générer une id unique basée sur la longueur de la liste des utilisateurs
           name: this.searchQuery,  // Utiliser le texte saisi comme nom
           picture: '',  // Utiliser une image par défaut ou permettre à l'utilisateur de la télécharger
           isAdmin: false,  // Par défaut, le nouvel utilisateur n'est pas un admin
@@ -113,7 +113,7 @@ export default {
         if (this.selectedUsers.length >= 5) {
           console.log("Vous ne pouvez pas ajouter plus de 5 éléments à la liste");
         }
-        this.$emit('add', this.selectedUsers);
+        this.$emit('add-user', newUser);  // émettre l'événement 'add-user' avec le nouvel utilisateur comme paramètre
       }
       if (this.isAddingGroup) {
          // Créer un nouveau groupe avec le texte saisi

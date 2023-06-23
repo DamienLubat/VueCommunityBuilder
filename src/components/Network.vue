@@ -1,44 +1,60 @@
 <template>
     <div>
-        <!-- Bouton qui affiche le boite de dialogue -->
-        <button @click="openAddMemberDialog">Ajouter un membre</button>
-        
-        <!-- Boite de dialogue -->
-        <AddMemberDialog :internalUsers="internalUsers" :groups="groups" :isOpen="isAddMemberDialogOpen" :result="myResult" 
-                @close="closeAddMemberDialog" @add-user="addUser" @add-group="addGroup" @remove="removeUser"/>
-
-        <form @submit.prevent="filter">
-            <label>
-                <input type="checkbox" value="amis" v-model="internalFilters"> Amis
-            </label>
-            <label>
-                <input type="checkbox" value="groupes" v-model="internalFilters"> Groupes
-            </label>
-            <label>
-                <input type="checkbox" value="groupesAdmin" v-model="internalFilters"> Groupes dont on est l’administrateur
-            </label>
-        </form>
-        <div>
-            <input type="text" v-model="searchText" placeholder="Recherche..">
-            
-            <div class="dropdown-content" v-show="searchText.length > 0 && filteredOptions.length > 0">
-                <div v-for="option in filteredOptions" :key="option.id">
-                    <input type="checkbox" :id="option.id" :value="option.name" v-model="selectedUsers">
-                    <label :for="option.id">{{ option.name }}</label>
-                </div>
-            </div>
-        </div>
-        <div @submit.prevent="filter">
-            <div v-for="user in filteredUsers" :key="user.id">
-                <UserCard :user="user" @remove="removeUser" />
-            </div>
-            <div v-for="group in internalGroups" :key="group.id">
-                <GroupCard :group="group" @remove="removeGroup" />
-            </div>
-        </div>
+      <div class="header">
+        <img src="../assets/logo.svg" class="circle-img" />
+        <h1>Mon Reseaux</h1>
+      </div>
+    <div style="display: flex;
+    justify-content: flex-end;">
+      <!-- Bouton qui affiche la boîte de dialogue -->
+      <button @click="openAddMemberDialog">Ajouter un membre</button>
     </div>
-</template>
-
+      <!-- Boîte de dialogue -->
+      <AddMemberDialog
+        :internalUsers="internalUsers"
+        :groups="groups"
+        :isOpen="isAddMemberDialogOpen"
+        :result="myResult"
+        @close="closeAddMemberDialog"
+        @add-user="addMember"
+        @remove="removeUser"
+      ></AddMemberDialog>
+  
+      <div class="filter-container row">
+        <form @submit.prevent="filter">
+          <label>
+            <input type="checkbox" value="amis" v-model="internalFilters" /> Amis
+          </label>
+          <label>
+            <input type="checkbox" value="groupes" v-model="internalFilters" /> Groupes
+          </label>
+          <label>
+            <input type="checkbox" value="groupesAdmin" v-model="internalFilters" /> Groupes dont on est l’administrateur
+          </label>
+        </form>
+  
+        <div class="search-container">
+          <input type="text" v-model="searchText" placeholder="Recherche.." />
+  
+          <div class="dropdown-content" v-show="searchText.length > 0 && filteredOptions.length > 0">
+            <div v-for="option in filteredOptions" :key="option.id">
+              <input type="checkbox" :id="option.id" :value="option.name" v-model="selectedUsers" />
+              <label :for="option.id">{{ option.name }}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div>
+        <div v-for="user in filteredUsers" :key="user.id">
+          <UserCard :user="user" @remove="removeUser" />
+        </div>
+        <div v-for="group in internalGroups" :key="group.id">
+          <GroupCard :group="group" @remove="removeGroup" />
+        </div>
+      </div>
+    </div>
+  </template>
 
 <script>
 import UserCard from './UserCard.vue';
@@ -65,7 +81,6 @@ export default {
             isAddMemberDialogOpen: false,
             searchText: '',
             options: [],
-            searchText: '',
             selectedUsers: [],
         };
     },
@@ -99,12 +114,20 @@ export default {
             return this.internalUsers.filter(user => user.name.toLowerCase().includes(filter));
         },
         displayedUsers() {
-            if (this.searchText.trim() === '') {
-                return this.internalUsers;
-            } else {
-                return this.internalUsers.filter(user => this.selectedUsers.includes(user.name));
+            let usersToDisplay = this.internalUsers;
+            
+            if (this.searchText.trim() !== '') {
+                let searchFilter = this.searchText.toLowerCase();
+                usersToDisplay = usersToDisplay.filter(user => user.name.toLowerCase().includes(searchFilter));
             }
+
+            if (this.selectedUsers.length > 0) {
+                usersToDisplay = usersToDisplay.filter(user => this.selectedUsers.includes(user.name));
+            }
+            
+            return usersToDisplay;
         }
+
     },
     methods: {
         openAddMemberDialog() {
@@ -118,6 +141,13 @@ export default {
                 this.internalUsers.push(newUser);
             }
         },
+        addMember(newUser) {
+        if (!this.internalUsers.some(user => user.id === newUser.id)) {
+            this.internalUsers.push(newUser);
+        }
+        console.log(this.internalUsers);
+        },
+
         addGroup(newGroup) {
             if (!this.internalGroups.some(group => group.id === newGroup.id)) {
                 this.internalGroups.push(newGroup);
