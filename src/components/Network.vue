@@ -38,15 +38,15 @@
   
           <div class="dropdown-content" v-show="searchText.length > 0 && filteredOptions.length > 0">
             <div v-for="option in filteredOptions" :key="option.id">
-              <input type="checkbox" :id="option.id" :value="option.name" v-model="selectedUsers" />
-              <label :for="option.id">{{ option.name }}</label>
+                <input type="checkbox" :id="option.id" :value="option.name" v-model="selectedUsers" />
+                <label :for="option.id">{{ typeof option.members === 'undefined' ? option.name : option.name + ' (Groupe)' }}</label>
             </div>
-          </div>
+        </div>
         </div>
       </div>
   
       <div>
-        <div v-for="user in filteredUsers" :key="user.id">
+        <div v-for="user in displayedUsers" :key="user.id">
           <UserCard :user="user" @remove="removeUser" />
         </div>
         <div v-for="group in internalGroups" :key="group.id">
@@ -111,20 +111,24 @@ export default {
                 return [];
             }
             let filter = this.searchText.toLowerCase();
-            return this.internalUsers.filter(user => user.name.toLowerCase().includes(filter));
+            return [...this.internalUsers.filter(user => user.name.toLowerCase().includes(filter)), 
+                    ...this.internalGroups.filter(group => group.name.toLowerCase().includes(filter))];
         },
         displayedUsers() {
             let usersToDisplay = this.internalUsers;
-            
+
             if (this.searchText.trim() !== '') {
                 let searchFilter = this.searchText.toLowerCase();
-                usersToDisplay = usersToDisplay.filter(user => user.name.toLowerCase().includes(searchFilter));
+                
+                if (this.selectedUsers.length > 0) {
+                    usersToDisplay = usersToDisplay.filter(user => this.selectedUsers.includes(user.name));
+                }
+                //Selection automatique des utilisateurs
+                /* else {
+                    usersToDisplay = usersToDisplay.filter(user => user.name.toLowerCase().includes(searchFilter));
+                }*/
             }
 
-            if (this.selectedUsers.length > 0) {
-                usersToDisplay = usersToDisplay.filter(user => this.selectedUsers.includes(user.name));
-            }
-            
             return usersToDisplay;
         }
 

@@ -47,7 +47,6 @@ export default {
       isAddingGroup: false,    // ajouter un groupe
       searchResults: [],       // résultats de la recherche
       selectedUsers: [],       // utilisateurs sélectionnés
-      selectedGroups: [],      // groupes sélectionnés
     };
   },
   computed: {
@@ -87,48 +86,29 @@ export default {
         this.selectedUsers.push(user);
       }
     },
-    // Méthode pour ajouter un groupe à la liste des groupes sélectionnés
-    addGroup(group) {
-      if (this.selectedGroups.length < 5 && !this.selectedGroups.includes(group)) {
-        this.selectedGroups.push(group);
-      }
-    },
     // Méthode pour ajouter tous les utilisateurs recherchés à la liste des utilisateurs sélectionnés
     add() {
-      if (this.isAddingFriend) {
-        // Créer un nouvel utilisateur avec le texte saisi
-        let newUser = {
-          id: Math.random().toString(36).substr(2, 9),  // Générer une id unique basée sur la longueur de la liste des utilisateurs
-          name: this.searchQuery,  // Utiliser le texte saisi comme nom
-          picture: '',  // Utiliser une image par défaut ou permettre à l'utilisateur de la télécharger
-          isAdmin: false,  // Par défaut, le nouvel utilisateur n'est pas un admin
-          isGroup: false,  // Par défaut, le nouvel utilisateur n'est pas un groupe
-          isFriend: true,  // Par défaut, le nouvel utilisateur n'est pas un ami
-        };
+      /*je veux faire cree un UserCard avec ce que l'utilisateur a taper(this.searchQuery)*/
+      console.log(this.searchQuery);
 
-        // Ajouter le nouvel utilisateur à la liste des utilisateurs sélectionnés
-        if (this.selectedUsers.length < 5 && !this.selectedUsers.includes(newUser)) {
-          this.selectedUsers.push(newUser);
-        }
-        if (this.selectedUsers.length >= 5) {
-          console.log("Vous ne pouvez pas ajouter plus de 5 éléments à la liste");
-        }
-        this.$emit('add-user', newUser);  // émettre l'événement 'add-user' avec le nouvel utilisateur comme paramètre
+      // Créer un nouvel utilisateur avec le texte saisi
+      let newUser = {
+        id: this.internalUsers.length + 1,  // Générer une id unique basée sur la longueur de la liste des utilisateurs
+        name: this.searchQuery,  // Utiliser le texte saisi comme nom
+        picture: '',  // Utiliser une image par défaut ou permettre à l'utilisateur de la télécharger
+        isAdmin: false,  // Par défaut, le nouvel utilisateur n'est pas un admin
+        isGroup: false,  // Par défaut, le nouvel utilisateur n'est pas un groupe
+        isFriend: true,  // Par défaut, le nouvel utilisateur n'est pas un ami
+      };
+
+      // Ajouter le nouvel utilisateur à la liste des utilisateurs sélectionnés
+      if (this.selectedUsers.length < 5 && !this.selectedUsers.includes(newUser)) {
+        this.selectedUsers.push(newUser);
       }
-      if (this.isAddingGroup) {
-         // Créer un nouveau groupe avec le texte saisi
-          let newGroup = {
-            id: this.groups.length + 1,  // Générer une id unique basée sur la longueur de la liste des groupes
-            name: this.searchQuery,  // Utiliser le texte saisi comme nom
-            members: [],  // Initialiser la liste des membres du groupe à vide
-            admins: [],  // Initialiser la liste des admins du groupe à vide
-          };
-
-          // Ajouter le nouveau groupe à la liste des groupes sélectionnés
-          this.groups.push(newGroup);
-
-          this.$emit('add-group', newGroup);
+      if (this.selectedUsers.length >= 5) {
+        console.log("Vous ne pouvez pas ajouter plus de 5 éléments à la liste");
       }
+      this.$emit('add', this.selectedUsers);
     },
     // Méthode pour fermer la boite de dialogue
     close() {
