@@ -38,15 +38,15 @@
   
           <div class="dropdown-content" v-show="searchText.length > 0 && filteredOptions.length > 0">
             <div v-for="option in filteredOptions" :key="option.id">
-                <input type="checkbox" :id="option.id" :value="option.name" v-model="selectedUsers" />
-                <label :for="option.id">{{ typeof option.members === 'undefined' ? option.name : option.name + ' (Groupe)' }}</label>
+              <input type="checkbox" :id="option.id" :value="option.name" v-model="selectedUsers" />
+              <label :for="option.id">{{ option.name }}</label>
             </div>
-        </div>
+          </div>
         </div>
       </div>
   
       <div>
-        <div v-for="user in displayedUsers" :key="user.id">
+        <div v-for="user in filteredUsers" :key="user.id">
           <UserCard :user="user" @remove="removeUser" />
         </div>
         <div v-for="group in internalGroups" :key="group.id">
@@ -86,8 +86,10 @@ export default {
     },
     computed: {
         filteredUsers: function () {
+            let usersToProcess = this.internalUsers;
+
             if (this.internalUsers) {
-                return this.internalUsers.filter(user => {
+                usersToProcess = this.internalUsers.filter(user => {
                     return (this.internalFilters.includes('amis') && user.isFriend) ||
                         (this.internalFilters.includes('groupes') && user.isGroup) ||
                         (this.internalFilters.includes('groupesAdmin') && user.isGroup && user.isAdmin);
@@ -95,6 +97,16 @@ export default {
             } else {
                 return [];
             }
+
+            if (this.searchText.trim() !== '') {
+                let searchFilter = this.searchText.toLowerCase();
+
+                if (this.selectedUsers.length > 0) {
+                    usersToProcess = usersToProcess.filter(user => this.selectedUsers.includes(user.name));
+                }
+            }
+
+            return usersToProcess;
         },
         filteredGroups: function () {
             let groups = [...this.internalGroups];
@@ -116,10 +128,10 @@ export default {
         },
         displayedUsers() {
             let usersToDisplay = this.internalUsers;
-
+            
             if (this.searchText.trim() !== '') {
                 let searchFilter = this.searchText.toLowerCase();
-                
+
                 if (this.selectedUsers.length > 0) {
                     usersToDisplay = usersToDisplay.filter(user => this.selectedUsers.includes(user.name));
                 }
