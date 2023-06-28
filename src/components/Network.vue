@@ -1,24 +1,10 @@
 <template>
     <div>
       <div class="header">
-        <img src="../assets/logo.svg" class="circle-img" />
-        <h1>Mon Reseaux</h1>
+        <img src="../../assets/img/logo.png" class="circle-img" />
+        <h1>SwitchOZ</h1>
       </div>
-    <div style="display: flex;
-    justify-content: flex-end;">
-      <!-- Bouton qui affiche la boîte de dialogue -->
-      <button @click="openAddMemberDialog">Ajouter un membre</button>
-    </div>
-      <!-- Boîte de dialogue -->
-      <AddMemberDialog
-        :internalUsers="internalUsers"
-        :groups="groups"
-        :isOpen="isAddMemberDialogOpen"
-        :result="myResult"
-        @close="closeAddMemberDialog"
-        @add-user="addMember"
-        @remove="removeUser"
-      ></AddMemberDialog>
+    
   
       <div class="filter-container row">
         <form @submit.prevent="filter">
@@ -44,7 +30,23 @@
           </div>
         </div>
       </div>
-  
+      
+      <div style="display: flex;
+    justify-content: flex-end;">
+      <!-- Bouton qui affiche la boîte de dialogue -->
+      <button @click="openAddMemberDialog">Ajouter un membre</button>
+    </div>
+      <!-- Boîte de dialogue -->
+      <AddMemberDialog
+        :internalUsers="internalUsers"
+        :groups="groups"
+        :isOpen="isAddMemberDialogOpen"
+        :result="myResult"
+        @close="closeAddMemberDialog"
+        @add-user="addMember"
+        @remove="removeUser"
+      ></AddMemberDialog>
+
       <div>
         <div v-for="user in filteredUsers" :key="user.id">
           <UserCard :user="user" @remove="removeUser" />
@@ -114,7 +116,7 @@ export default {
             return this.internalUsers.filter(user => user.name.toLowerCase().includes(filter));
         },
         displayedUsers() {
-            let usersToDisplay = this.internalUsers;
+          let usersToDisplay = this.internalUsers;
             
             if (this.searchText.trim() !== '') {
                 let searchFilter = this.searchText.toLowerCase();
@@ -172,15 +174,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-
-.dropdown-content {
-  position: absolute;
-  /* autres styles */
-}
-.dropdown-content label {
-  /* styles pour les labels */
-}
-
-</style>

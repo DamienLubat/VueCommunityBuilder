@@ -1,6 +1,6 @@
 <template>
     <div class="user-card">
-        <img :src="user.picture" :alt="user.name" class="circle-img">
+        <img :src="user.picture" :alt="user.name" class="circle-img-perso">
         <div class="user-info">
             <div>{{ user.name }}</div>
             <button @click="remove">Supprimer</button>
