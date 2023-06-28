@@ -88,8 +88,10 @@ export default {
     },
     computed: {
         filteredUsers: function () {
+            let usersToProcess = this.internalUsers;
+
             if (this.internalUsers) {
-                return this.internalUsers.filter(user => {
+                usersToProcess = this.internalUsers.filter(user => {
                     return (this.internalFilters.includes('amis') && user.isFriend) ||
                         (this.internalFilters.includes('groupes') && user.isGroup) ||
                         (this.internalFilters.includes('groupesAdmin') && user.isGroup && user.isAdmin);
@@ -97,6 +99,16 @@ export default {
             } else {
                 return [];
             }
+
+            if (this.searchText.trim() !== '') {
+                let searchFilter = this.searchText.toLowerCase();
+
+                if (this.selectedUsers.length > 0) {
+                    usersToProcess = usersToProcess.filter(user => this.selectedUsers.includes(user.name));
+                }
+            }
+
+            return usersToProcess;
         },
         filteredGroups: function () {
             let groups = [...this.internalGroups];
@@ -113,20 +125,24 @@ export default {
                 return [];
             }
             let filter = this.searchText.toLowerCase();
-            return this.internalUsers.filter(user => user.name.toLowerCase().includes(filter));
+            return [...this.internalUsers.filter(user => user.name.toLowerCase().includes(filter)), 
+                    ...this.internalGroups.filter(group => group.name.toLowerCase().includes(filter))];
         },
         displayedUsers() {
           let usersToDisplay = this.internalUsers;
             
             if (this.searchText.trim() !== '') {
                 let searchFilter = this.searchText.toLowerCase();
-                usersToDisplay = usersToDisplay.filter(user => user.name.toLowerCase().includes(searchFilter));
+
+                if (this.selectedUsers.length > 0) {
+                    usersToDisplay = usersToDisplay.filter(user => this.selectedUsers.includes(user.name));
+                }
+                //Selection automatique des utilisateurs
+                /* else {
+                    usersToDisplay = usersToDisplay.filter(user => user.name.toLowerCase().includes(searchFilter));
+                }*/
             }
 
-            if (this.selectedUsers.length > 0) {
-                usersToDisplay = usersToDisplay.filter(user => this.selectedUsers.includes(user.name));
-            }
-            
             return usersToDisplay;
         }
 
