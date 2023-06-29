@@ -1,5 +1,3 @@
-@import './grid.css';
-
 body {
   background-color: #1e1221;
   background-repeat: no-repeat;
@@ -18,11 +16,12 @@ body {
   display: flex;
   justify-content: space-between;
 }
+
 .filter-container {
   display: flex;
   justify-content: space-between;
   margin-bottom: 200px;
-  background-color:#1e1221;
+  background-color: #1e1221;
   padding: 10px;
   margin: 20px;
 }
@@ -30,6 +29,7 @@ body {
 .search-container {
   display: flex;
   align-items: center;
+  max-width: 100%;
 }
 
 .circle-img {
@@ -37,14 +37,16 @@ body {
   height: 50px;
   object-fit: cover;
   border-radius: 50%; 
-} 
+}
 
 .circle-img-perso {
   width: 200px;
   height: 200px;
   object-fit: cover;
   border-radius: 50%; 
+  margin-bottom: 20px; /* Ajout de la marge en bas */
 } 
+
 .row {
   --bs-gutter-x: 1.5rem;
   --bs-gutter-y: 0;
@@ -59,4 +61,34 @@ body {
 .dropdown-content {
   position: absolute;
   color: rgba(225, 237, 222);
+}
+
+button {
+  font-family: monospace;
+  font-size: 0.7rem;
+  color: rgba(225, 237, 222);
+  padding: 5px 10px;
+  border-radius: 10px;
+  border: 2px solid rgba(225, 237, 222);
+  background: #1e1221;
+  box-shadow: 2px 2px rgba(225, 237, 222);
+  cursor: pointer;
+  margin: 10px 0;
+}
+
+button:active {
+  box-shadow: none;
+  transform: translate(3px, 3px);
+}
+
+h3 {
+  color: rgba(225, 237, 222);
+  padding: 5px 10px;
+  border-radius: 10px;
+  border: solid rgba(225, 237, 222);
+  background: #1e1221;
+}
+
+.dialog {
+  margin: auto;
 }

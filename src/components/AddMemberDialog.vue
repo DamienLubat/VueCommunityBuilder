@@ -4,7 +4,7 @@
     <!-- Création d'une carte qui contiendra tous les éléments du dialogue -->
     <div class="card">
       <!-- Titre de la carte -->
-      <h2>Ajouter des amis ou des groupes</h2>
+      <h3>Ajouter des amis ou des groupes</h3>
       <!-- Section pour choisir entre amis ou groupes -->
       <div>
         <!-- Checkbox pour choisir d'ajouter un ami -->

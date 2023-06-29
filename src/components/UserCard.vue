@@ -34,6 +34,7 @@ export default {
 <style scoped>
 .user-card {
     display: flex;
+    margin-bottom: 50px;
 }
 .circle-img {
     width: 200px;
@@ -45,10 +46,6 @@ export default {
 .user-info {
     
     margin: auto;
-}
-
-.user-card {
-    margin-bottom: 50px;
 }
 
 .small-circle-img {
