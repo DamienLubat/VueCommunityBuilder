@@ -92,3 +92,68 @@ h3 {
 .dialog {
   margin: auto;
 }
+
+input[type="text"] {
+  color: #1e1221;
+  padding: 5px 10px;
+  border-radius: 10px;
+  border: solid #1e1221;
+  background: rgba(225, 237, 222);
+}
+
+/* Style de base de l'input checkbox */
+input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Style du label */
+#checkout {
+  cursor: pointer;
+  padding: 10px;
+  background-color: #1e1221;
+}
+
+/* Style de l'input checkbox lorsqu'il est coché */
+input[type="checkbox"]:checked + #checkout {
+  background-color: #1e1221;
+}
+
+/* Style de l'indicateur du mode sombre */
+input[type="checkbox"] + #checkout::before {
+  content: '';
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-right: 8px;
+  border: 2px solid #fff;
+  border-radius: 3px;
+  vertical-align: middle;
+  background-color: #1e1221;
+}
+
+/* Style de l'indicateur du mode sombre lorsqu'il est coché */
+input[type="checkbox"]:checked + #checkout::before {
+  content: "\2713";
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-right: 8px;
+  border: 2px solid #fff;
+  border-radius: 3px;
+  vertical-align: middle;
+  text-align: center;
+  line-height: 12px; /* Ajuster l'espacement vertical */
+  background-color: #1e1221;
+}
+
+@media screen and (max-width: 509) {
+  label[for="groupesAdminFilters"] {
+    display: block;
+    margin-bottom: auto;
+  line-break: 102px; /* Ajuster l'espacement vertical */
+
+  }
+}
