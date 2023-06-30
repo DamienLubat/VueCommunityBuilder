@@ -7,18 +7,23 @@ Le projet est une application de réseau social construite avec Vue.js. Elle com
 L'application se compose de plusieurs composants Vue.js, notamment :
 
 Network.vue
+
 C'est le composant principal qui gère les utilisateurs et les groupes. Il permet de naviguer entre différentes vues et de passer des informations aux autres composants.
 
 UserCard.vue
+
 Ce composant affiche les détails d'un utilisateur. Il est utilisé dans le composant Network.vue pour afficher la liste des utilisateurs.
 
 GroupCard.vue
+
 Ce composant affiche les détails d'un groupe. Il est utilisé dans le composant Network.vue pour afficher la liste des groupes.
 
 Search.vue
+
 Ce composant permet de rechercher des utilisateurs ou des groupes par leur nom. Il est utilisé dans le composant Network.vue.
 
 AddMemberDialog.vue
+
 C'est un composant de boîte de dialogue qui s'affiche lorsque l'utilisateur souhaite ajouter de nouveaux amis ou groupes. Il filtre les utilisateurs et les groupes en fonction de la requête de recherche et permet à l'utilisateur de sélectionner ceux qu'il souhaite ajouter. L'utilisateur peut ajouter un maximum de 5 amis ou groupes à la fois.
 
 ## Utilisation
@@ -30,7 +35,7 @@ cd vue-social-network
 npm install
 npm run serve
 ```
-L'application sera disponible à l'adresse http://localhost:8080.
+L'application sera disponible à l'adresse http://localhost:{Port}.
 
 ## Fichiers inclus
 
