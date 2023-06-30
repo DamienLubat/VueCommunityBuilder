@@ -157,3 +157,11 @@ input[type="checkbox"]:checked + #checkout::before {
 
   }
 }
+
+@media only screen and (max-width: 600px) {
+  body {
+    transform: scale(0.9); /* Ajustez la valeur de l'échelle selon vos besoins */
+    transform-origin: top;
+  }
+}
+
