@@ -5,7 +5,9 @@
         <img src="../../assets/img/logo.png" class="circle-img" />
         <h1>SwitchOZ</h1>
       </div>
+
       <!--Scrolling menu-->
+      
       <div style="display: flex; justify-content: flex-end;">
         <svg @click="toggleMasterFiltre" xmlns="http://www.w3.org/2000/svg" width="29" height="100" viewBox="0 0 24 24"
           fill="none" stroke="rgba(225, 237, 222)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -17,7 +19,9 @@
     </div>
 
     <div v-show="isMasterFilterActive">
+      
       <!--Simple filter-->
+      
       <div style="display: flex; justify-content: flex-end;">
         <form @submit.prevent="filter" v-show="isFilterActive">
           <div>
@@ -34,10 +38,12 @@
           <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
         </svg>
       </div>
+      
       <!--filter by search-->
+      
       <div style="display: flex; justify-content: flex-end;">
         <div v-show="isSearchActive">
-          <input type="search" v-model="searchText" placeholder="Recherche.." />
+          <input type="text" v-model="searchText" placeholder="Recherche.." />
           <div class="dropdown-content" v-show="searchText.length > 0 && filteredOptions.length > 0">
             <div v-for="option in filteredOptions" :key="option.id" style="margin-top: 20px;">
               <input type="checkbox" :id="option.id" :value="option.name" v-model="selectedUsers" />
@@ -53,7 +59,9 @@
       </div>
 
       <div style="display: flex; justify-content: flex-end;">
+        
         <!-- Bouton qui affiche la boîte de dialogue -->
+        
         <svg @click="openAddMemberDialog" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 25 25"
           fill="none" stroke="rgba(225, 237, 222)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
           class="feather feather-user-plus">
@@ -63,11 +71,15 @@
           <line x1="24" y1="11" x2="18" y2="11"></line>
         </svg>
       </div>
+      
       <!-- Boîtex de dialogue -->
+      
       <AddMemberDialog :internalUsers="internalUsers" :groups="groups" :isOpen="isAddMemberDialogOpen" :result="myResult"
         @close="closeAddMemberDialog" @add-user="addMember" @remove="removeUser"></AddMemberDialog>
     </div>
+    
     <!--Show amis/groupe-->
+    
     <div>
       <h3>Amis</h3>
       <div v-for="user in filteredUsers" :key="user.id">
