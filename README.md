@@ -1,45 +1,42 @@
 #  VueCommunityBuilder
+The project is a social network application built with Vue.js. It includes basic features to add friends, manage groups, and conduct searches.
 
-Le projet est une application de réseau social construite avec Vue.js. Elle comprend des fonctionnalités de base pour ajouter des amis, gérer des groupes, et faire des recherches.
+## Components
+The application consists of several Vue.js components, including:
 
-## Composants
+### Network.vue
 
-L'application se compose de plusieurs composants Vue.js, notamment :
+This is the main component that manages users and groups. It allows you to navigate between different views and pass information to other components.
 
-Network.vue
+### UserCard.vue
 
-C'est le composant principal qui gère les utilisateurs et les groupes. Il permet de naviguer entre différentes vues et de passer des informations aux autres composants.
+This component displays the details of a user. It is used in the Network.vue component to display the list of users.
 
-UserCard.vue
+### GroupCard.vue
 
-Ce composant affiche les détails d'un utilisateur. Il est utilisé dans le composant Network.vue pour afficher la liste des utilisateurs.
+This component displays the details of a group. It is used in the Network.vue component to display the list of groups.
 
-GroupCard.vue
+### Search.vue
 
-Ce composant affiche les détails d'un groupe. Il est utilisé dans le composant Network.vue pour afficher la liste des groupes.
+This component allows you to search for users or groups by their name. It is used in the Network.vue component.
 
-Search.vue
+### AddMemberDialog.vue
 
-Ce composant permet de rechercher des utilisateurs ou des groupes par leur nom. Il est utilisé dans le composant Network.vue.
+This is a dialog box component that appears when the user wants to add new friends or groups. It filters users and groups based on the search query and allows the user to select those they wish to add. The user can add a maximum of 5 friends or groups at a time.
 
-AddMemberDialog.vue
+### Usage
+To use the application, all you need to do is clone the repository, install the dependencies, and start the development server.
 
-C'est un composant de boîte de dialogue qui s'affiche lorsque l'utilisateur souhaite ajouter de nouveaux amis ou groupes. Il filtre les utilisateurs et les groupes en fonction de la requête de recherche et permet à l'utilisateur de sélectionner ceux qu'il souhaite ajouter. L'utilisateur peut ajouter un maximum de 5 amis ou groupes à la fois.
-
-## Utilisation
-
-Pour utiliser l'application, il vous suffit de cloner le dépôt, d'installer les dépendances et de démarrer le serveur de développement.
 ```sh
 git clone https://github.com/your-username/vue-social-network.git
 cd vue-social-network
 npm install
 npm run serve
 ```
-L'application sera disponible à l'adresse http://localhost:{Port}.
+The application will be available at the address http://localhost:{Port}.
 
-## Fichiers inclus
-
-AddMemberDialog.vue : Ce fichier est un composant Vue.js qui gère l'ajout de nouveaux amis et groupes. Il inclut une boîte de dialogue qui s'affiche lorsque l'utilisateur clique sur le bouton d'ajout. Dans cette boîte de dialogue, l'utilisateur peut rechercher et sélectionner de nouveaux amis et groupes à ajouter.
+## Included Files
+AddMemberDialog.vue: This file is a Vue.js component that manages the addition of new friends and groups. It includes a dialog box that appears when the user clicks on the add button. In this dialog box, the user can search for and select new friends and groups to add.
 
 ## Project Setup
 
